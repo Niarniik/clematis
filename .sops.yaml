@@ -1,0 +1,10 @@
+keys:
+  - &admin_julius EBE7 5BC0 5820 6BC9 F440  895F F7D6 E464 4ACD 05A4
+  - &server_clematis age1pqkkuwmn4wdyk6ncptpxttjnqpuu4gk9sgwwqds2wetvjmv8s48qwfwf5x
+creation_rules:
+  - path_regex: ^sops/secrets.yaml$
+    key_groups:
+    - pgp:
+      - *admin_julius
+      age:
+      - *server_clematis
