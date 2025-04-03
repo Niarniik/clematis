@@ -5,6 +5,7 @@
 {
   imports = [
     ./authentik.nix
+    ./cadvisor.nix
     ./gitea.nix
     ./outline.nix
     ./plane.nix
@@ -40,7 +41,12 @@
     ];
   };
 
-  virtualisation.docker.enable = true;
+  virtualisation.docker = {
+    enable = true;
+    daemon.settings = {
+      metrics-addr = "127.0.0.1:9323";
+    };
+  };
 
   environment.systemPackages = with pkgs; [
     vim
