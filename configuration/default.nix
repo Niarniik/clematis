@@ -5,6 +5,7 @@
 {
   imports = [
     ./authentik.nix
+    ./chiefonboarding.nix
     ./gitea.nix
     ./metrics.nix
     ./outline.nix
