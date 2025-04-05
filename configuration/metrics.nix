@@ -1,4 +1,5 @@
 {
+  lib,
   domain,
   ...
 }:
@@ -6,7 +7,8 @@ let
   subDomain = "dash";
   prometheusHttpPort = 3100;
   dockerMetricsHttpPort = 9323;
-  cAdvisorHttpPort = 7080;
+  cAdvisorMetricsHttpPort = 7080;
+  caddyMetricsHttpPort = 2019;
   grafanaHttpPort = 3000;
 in
 {
@@ -22,8 +24,16 @@ in
 
   services.cadvisor = {
     enable = true;
-    port = cAdvisorHttpPort;
+    port = cAdvisorMetricsHttpPort;
   };
+
+  services.caddy.globalConfig = lib.mkAfter ''
+    admin localhost:${toString caddyMetricsHttpPort}
+
+    metrics {
+        per_host
+    }
+  '';
 
   services.alloy.enable = true;
   environment.etc."alloy/config.alloy".text = ''
@@ -43,8 +53,13 @@ in
     }
 
     prometheus.scrape "cadvisor" {
-      targets = [{__address__ = "localhost:${toString cAdvisorHttpPort}"}]
+      targets = [{__address__ = "localhost:${toString cAdvisorMetricsHttpPort}"}]
       scrape_interval = "15s"
+      forward_to = [prometheus.remote_write.default.receiver]
+    }
+
+    prometheus.scrape "caddy" {
+      targets = [{__address__ = "localhost:${toString caddyMetricsHttpPort}"}]
       forward_to = [prometheus.remote_write.default.receiver]
     }
 
