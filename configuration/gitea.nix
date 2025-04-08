@@ -28,6 +28,7 @@ in
       service = {
         ENABLE_PASSWORD_SIGNIN_FORM = false;
         ALLOW_ONLY_EXTERNAL_REGISTRATION = true;
+        REQUIRE_SIGNIN_VIEW = true;
       };
       oauth2_client.ENABLE_AUTO_REGISTRATION = true;
     };
