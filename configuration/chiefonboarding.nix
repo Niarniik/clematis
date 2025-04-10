@@ -10,8 +10,6 @@ let
 in
 {
   environment.etc."chiefonboarding/docker-compose.yml".text = ''
-    version: '3'
-
     services:
       db:
         image: postgres:latest
@@ -32,12 +30,24 @@ in
           - SECRET_KEY=''${SECRET_KEY?secret key is required}
           - DATABASE_URL=postgres://postgres:postgres@db:5432/chiefonboarding
           - ALLOWED_HOSTS=${subDomain}.${domain}
+          - OIDC_LOGIN_DISPLAY=Authentik
+          - OIDC_CLIENT_ID=iR1GO5QH2vgISvLFt9A3IiMiOoxyfdFB2WtKI0ff
+          - OIDC_CLIENT_SECRET=''${OIDC_CLIENT_SECRET?client secret is required}
+          - OIDC_AUTHORIZATION_URL=https://auth.clemat.is/application/o/authorize/
+          - OIDC_TOKEN_URL=https://auth.clemat.is/application/o/token/
+          - OIDC_USERINFO_URL=https://auth.clemat.is/application/o/userinfo/
+          - OIDC_LOGOUT_URL=https://auth.clemat.is/application/o/chiefonboarding/end-session/
+          - OIDC_FORCE_AUTHN=True
+          - OIDC_ROLE_ADMIN_PATTERN=^chiefonboarding Admins$
+          - OIDC_ROLE_PATH_IN_RETURN=groups
+          - DEBUG_LOGGING=True
         depends_on:
           - db
   '';
 
   sops.secrets = {
     chiefonboardingSecretKey = { };
+    chiefonboardingClientSecret = { };
   };
 
   systemd.services.chiefonboarding = {
@@ -46,6 +56,7 @@ in
       WorkingDirectory = "/etc/chiefonboarding";
       ExecStartPre = "${pkgs.bash}/bin/bash ${pkgs.writeText "startPre" ''
         echo "SECRET_KEY=$(cat ${config.sops.secrets.chiefonboardingSecretKey.path})" > .env
+        echo "OIDC_CLIENT_SECRET=$(cat ${config.sops.secrets.chiefonboardingClientSecret.path})" >> .env
 
         ${pkgs.docker}/bin/docker compose pull
       ''}";
