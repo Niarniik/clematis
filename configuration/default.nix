@@ -29,7 +29,7 @@
   };
   users.users.root.openssh.authorizedKeys.keys = [
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICVYTxSfsoGYBKzuSc9Q4Fc8zuCtumj3Nw6ZxwYDBUaS julius"
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIN+uQFeYejSeqQvM1zMCUW10ooAJmD+3ZEVpZLMngUiU bika"
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFB/byXCHGU67JO/LD3Tn5L6tnK8A/CYjSN01YfzbjFj bika"
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICPk9/NeWgM6Z7mJTLkmzBwD8bDPbddrdZ06Oril3597 bikerpenguin67"
   ];
   services.fail2ban.enable = true;
