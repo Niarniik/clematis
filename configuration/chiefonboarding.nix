@@ -41,6 +41,7 @@ in
           - OIDC_ROLE_ADMIN_PATTERN=^chiefonboarding Admins$
           - OIDC_ROLE_PATH_IN_RETURN=groups
           - DEBUG_LOGGING=True
+          - API_ACCESS=True
         depends_on:
           - db
   '';
