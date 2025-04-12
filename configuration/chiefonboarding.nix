@@ -39,6 +39,8 @@ in
           - OIDC_LOGOUT_URL=https://auth.clemat.is/application/o/chiefonboarding/end-session/
           - OIDC_FORCE_AUTHN=True
           - OIDC_ROLE_ADMIN_PATTERN=^chiefonboarding Admins$
+          - OIDC_ROLE_MANAGER_PATTERN=^Managers$
+          - OIDC_ROLE_NEW_HIRE_PATTERN=^Trainees$
           - OIDC_ROLE_PATH_IN_RETURN=groups
           - DEBUG_LOGGING=True
           - API_ACCESS=True
