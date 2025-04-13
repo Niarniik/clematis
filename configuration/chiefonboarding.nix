@@ -66,6 +66,7 @@ in
       ExecStart = "${pkgs.docker}/bin/docker compose up";
       ExecStop = "${pkgs.docker}/bin/docker compose down";
     };
+    restartTriggers = [ config.environment.etc."chiefonboarding/docker-compose.yml".text ];
   };
 
   services.caddy = {
