@@ -38,6 +38,7 @@ in
           - OIDC_USERINFO_URL=https://auth.clemat.is/application/o/userinfo/
           - OIDC_LOGOUT_URL=https://auth.clemat.is/application/o/chiefonboarding/end-session/
           - OIDC_FORCE_AUTHN=True
+          - OIDC_ROLE_UPDATING=False
           - OIDC_ROLE_ADMIN_PATTERN=^chiefonboarding Admins$
           - OIDC_ROLE_MANAGER_PATTERN=^Managers$
           - OIDC_ROLE_NEW_HIRE_PATTERN=^Trainees$
