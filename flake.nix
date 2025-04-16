@@ -14,15 +14,13 @@
   outputs =
     inputs:
     let
-      hostName = "clematis";
-      domain = "clemat.is";
+      routes = import ./routes.nix;
     in
     {
-      nixosConfigurations.${hostName} = inputs.nixpkgs.lib.nixosSystem {
+      nixosConfigurations.${routes.hostName} = inputs.nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
-        specialArgs = { inherit inputs domain; };
+        specialArgs = { inherit inputs routes; };
         modules = [
-          { networking.hostName = hostName; }
           # Hostinger specific configurations
           ./hostinger.nix
           ./disk-config.nix

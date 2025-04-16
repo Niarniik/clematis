@@ -1,5 +1,6 @@
 {
   pkgs,
+  routes,
   ...
 }:
 {
@@ -42,6 +43,7 @@
       443
     ];
   };
+  networking.hostName = routes.hostName;
 
   virtualisation.docker.enable = true;
 

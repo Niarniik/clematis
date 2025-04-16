@@ -1,34 +1,26 @@
 {
   lib,
-  domain,
+  routes,
   ...
 }:
-let
-  subDomain = "dash";
-  prometheusHttpPort = 3100;
-  dockerMetricsHttpPort = 9323;
-  cAdvisorMetricsHttpPort = 7080;
-  caddyMetricsHttpPort = 2019;
-  grafanaHttpPort = 3000;
-in
 {
   services.prometheus = {
     enable = true;
-    port = prometheusHttpPort;
+    port = routes.metrics.prometheus.httpPort;
     extraFlags = [ "--web.enable-remote-write-receiver" ];
   };
 
   virtualisation.docker.daemon.settings = {
-    metrics-addr = "localhost:${toString dockerMetricsHttpPort}";
+    metrics-addr = "localhost:${toString routes.metrics.docker.httpPort}";
   };
 
   services.cadvisor = {
     enable = true;
-    port = cAdvisorMetricsHttpPort;
+    port = routes.metrics.cAdvisor.httpPort;
   };
 
   services.caddy.globalConfig = lib.mkAfter ''
-    admin localhost:${toString caddyMetricsHttpPort}
+    admin localhost:${toString routes.metrics.caddy.httpPort}
 
     metrics {
         per_host
@@ -47,25 +39,25 @@ in
     }
 
     prometheus.scrape "docker" {
-      targets = [{__address__ = "localhost:${toString dockerMetricsHttpPort}"}]
+      targets = [{__address__ = "localhost:${toString routes.metrics.docker.httpPort}"}]
       scrape_interval = "15s"
       forward_to = [prometheus.remote_write.default.receiver]
     }
 
     prometheus.scrape "cadvisor" {
-      targets = [{__address__ = "localhost:${toString cAdvisorMetricsHttpPort}"}]
+      targets = [{__address__ = "localhost:${toString routes.metrics.cAdvisor.httpPort}"}]
       scrape_interval = "15s"
       forward_to = [prometheus.remote_write.default.receiver]
     }
 
     prometheus.scrape "caddy" {
-      targets = [{__address__ = "localhost:${toString caddyMetricsHttpPort}"}]
+      targets = [{__address__ = "localhost:${toString routes.metrics.caddy.httpPort}"}]
       forward_to = [prometheus.remote_write.default.receiver]
     }
 
     prometheus.remote_write "default" {
       endpoint {
-        url = "http://localhost:${toString prometheusHttpPort}/api/v1/write"
+        url = "http://localhost:${toString routes.metrics.prometheus.httpPort}/api/v1/write"
       }
     }
   '';
@@ -74,9 +66,9 @@ in
     enable = true;
     settings = {
       server = {
-        http_port = grafanaHttpPort;
-        domain = "${subDomain}.${domain}";
-        root_url = "https://${subDomain}.${domain}";
+        http_port = routes.metrics.grafana.httpPort;
+        domain = "${routes.metrics.subDomain}.${routes.domain}";
+        root_url = "https://${routes.metrics.subDomain}.${routes.domain}";
       };
     };
     provision.datasources.settings = {
@@ -84,15 +76,15 @@ in
         {
           name = "Prometheus";
           type = "prometheus";
-          url = "http://localhost:${toString prometheusHttpPort}";
+          url = "http://localhost:${toString routes.metrics.prometheus.httpPort}";
         }
       ];
     };
   };
 
   services.caddy = {
-    virtualHosts."${subDomain}.${domain}".extraConfig = ''
-      reverse_proxy http://localhost:${toString grafanaHttpPort}
+    virtualHosts."${routes.metrics.subDomain}.${routes.domain}".extraConfig = ''
+      reverse_proxy http://localhost:${toString routes.metrics.grafana.httpPort}
     '';
   };
 }

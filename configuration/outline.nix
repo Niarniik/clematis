@@ -1,12 +1,8 @@
 {
   config,
-  domain,
+  routes,
   ...
 }:
-let
-  subDomain = "docs";
-  httpPort = 3003;
-in
 {
   assertions = [
     {
@@ -22,14 +18,14 @@ in
 
   services.outline = {
     enable = true;
-    publicUrl = "https://${subDomain}.${domain}";
-    port = httpPort;
+    publicUrl = "https://${routes.outline.subDomain}.${routes.domain}";
+    port = routes.outline.httpPort;
     forceHttps = false;
     storage.storageType = "local";
     oidcAuthentication = {
-      authUrl = "https://auth.${domain}/application/o/authorize/";
-      tokenUrl = "https://auth.${domain}/application/o/token/";
-      userinfoUrl = "https://auth.${domain}/application/o/userinfo/";
+      authUrl = "https://${routes.authentik.subDomain}.${routes.domain}/application/o/authorize/";
+      tokenUrl = "https://${routes.authentik.subDomain}.${routes.domain}/application/o/token/";
+      userinfoUrl = "https://${routes.authentik.subDomain}.${routes.domain}/application/o/userinfo/";
       clientId = "RIz2q9nYXiC2aXWJZt7FZ3tCrrxqrfjtrFIucZQe";
       clientSecretFile = "${config.sops.secrets.outlineOidcClientSecret.path}";
       scopes = [
@@ -43,8 +39,8 @@ in
   };
 
   services.caddy = {
-    virtualHosts."${subDomain}.${domain}".extraConfig = ''
-      reverse_proxy http://localhost:${toString httpPort}
+    virtualHosts."${routes.outline.subDomain}.${routes.domain}".extraConfig = ''
+      reverse_proxy http://localhost:${toString routes.outline.httpPort}
     '';
   };
 }

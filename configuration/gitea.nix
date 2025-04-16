@@ -1,12 +1,8 @@
 {
   config,
-  domain,
+  routes,
   ...
 }:
-let
-  subDomain = "git";
-  httpPort = 3200;
-in
 {
   assertions = [
     {
@@ -21,9 +17,9 @@ in
     lfs.enable = true;
     settings = {
       server = rec {
-        DOMAIN = "${subDomain}.${domain}";
+        DOMAIN = "${routes.gitea.subDomain}.${routes.domain}";
         ROOT_URL = "https://${DOMAIN}/";
-        HTTP_PORT = httpPort;
+        HTTP_PORT = routes.gitea.httpPort;
       };
       service = {
         ENABLE_PASSWORD_SIGNIN_FORM = false;
@@ -35,8 +31,8 @@ in
   };
 
   services.caddy = {
-    virtualHosts."${subDomain}.${domain}".extraConfig = ''
-      reverse_proxy http://localhost:${toString httpPort}
+    virtualHosts."${routes.gitea.subDomain}.${routes.domain}".extraConfig = ''
+      reverse_proxy http://localhost:${toString routes.gitea.httpPort}
     '';
   };
 }

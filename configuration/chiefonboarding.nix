@@ -1,13 +1,9 @@
 {
   pkgs,
   config,
-  domain,
+  routes,
   ...
 }:
-let
-  subDomain = "onboarding";
-  httpPort = 8888;
-in
 {
   environment.etc."chiefonboarding/docker-compose.yml".text = ''
     services:
@@ -25,23 +21,23 @@ in
         image: chiefonboarding/chiefonboarding:latest
         restart: always
         ports:
-          - "${toString httpPort}:8000"
+          - "${toString routes.chiefonboarding.httpPort}:8000"
         environment:
           - SECRET_KEY=''${SECRET_KEY?secret key is required}
           - DATABASE_URL=postgres://postgres:postgres@db:5432/chiefonboarding
-          - ALLOWED_HOSTS=${subDomain}.${domain}
+          - ALLOWED_HOSTS=${routes.chiefonboarding.subDomain}.${routes.domain}
           - OIDC_LOGIN_DISPLAY=Authentik
           - OIDC_CLIENT_ID=iR1GO5QH2vgISvLFt9A3IiMiOoxyfdFB2WtKI0ff
           - OIDC_CLIENT_SECRET=''${OIDC_CLIENT_SECRET?client secret is required}
-          - OIDC_AUTHORIZATION_URL=https://auth.clemat.is/application/o/authorize/
-          - OIDC_TOKEN_URL=https://auth.clemat.is/application/o/token/
-          - OIDC_USERINFO_URL=https://auth.clemat.is/application/o/userinfo/
-          - OIDC_LOGOUT_URL=https://auth.clemat.is/application/o/chiefonboarding/end-session/
+          - OIDC_AUTHORIZATION_URL=https://${routes.authentik.subDomain}.${routes.domain}/application/o/authorize/
+          - OIDC_TOKEN_URL=https://${routes.authentik.subDomain}.${routes.domain}/application/o/token/
+          - OIDC_USERINFO_URL=https://${routes.authentik.subDomain}.${routes.domain}/application/o/userinfo/
+          - OIDC_LOGOUT_URL=https://${routes.authentik.subDomain}.${routes.domain}/application/o/chiefonboarding/end-session/
           - OIDC_FORCE_AUTHN=True
           - OIDC_ROLE_UPDATING=False
           - OIDC_ROLE_ADMIN_PATTERN=^chiefonboarding Admins$
-          - OIDC_ROLE_MANAGER_PATTERN=^Managers$
-          - OIDC_ROLE_NEW_HIRE_PATTERN=^Trainees$
+          - OIDC_ROLE_MANAGER_PATTERN=^chiefonboarding Managers$
+          - OIDC_ROLE_NEW_HIRE_PATTERN=^chiefonboarding Trainees$
           - OIDC_ROLE_PATH_IN_RETURN=groups
           - DEBUG_LOGGING=True
           - API_ACCESS=True
@@ -71,8 +67,8 @@ in
   };
 
   services.caddy = {
-    virtualHosts."${subDomain}.${domain}".extraConfig = ''
-      reverse_proxy http://localhost:${toString httpPort}
+    virtualHosts."${routes.chiefonboarding.subDomain}.${routes.domain}".extraConfig = ''
+      reverse_proxy http://localhost:${toString routes.chiefonboarding.httpPort}
     '';
   };
 }

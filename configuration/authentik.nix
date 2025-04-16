@@ -1,14 +1,9 @@
 {
   pkgs,
   config,
-  domain,
+  routes,
   ...
 }:
-let
-  subDomain = "auth";
-  httpPort = 9080;
-  httpsPort = 9433;
-in
 {
   environment.etc."authentik/docker-compose.yml".source = builtins.fetchurl {
     url = "https://goauthentik.io/docker-compose.yml";
@@ -27,8 +22,8 @@ in
       ExecStartPre = "${pkgs.bash}/bin/bash ${pkgs.writeText "startPre" ''
         echo "PG_PASS=$(cat ${config.sops.secrets.authentikPgPass.path})" > .env
         echo "AUTHENTIK_SECRET_KEY=$(cat ${config.sops.secrets.authentikSecretKey.path})" >> .env
-        echo "COMPOSE_PORT_HTTP=${toString httpPort}" >> .env
-        echo "COMPOSE_PORT_HTTPS=${toString httpsPort}" >> .env
+        echo "COMPOSE_PORT_HTTP=${toString routes.authentik.httpPort}" >> .env
+        echo "COMPOSE_PORT_HTTPS=${toString routes.authentik.httpsPort}" >> .env
 
         ${pkgs.docker}/bin/docker compose pull
       ''}";
@@ -38,8 +33,8 @@ in
   };
 
   services.caddy = {
-    virtualHosts."${subDomain}.${domain}".extraConfig = ''
-      reverse_proxy http://localhost:${toString httpPort}
+    virtualHosts."${routes.authentik.subDomain}.${routes.domain}".extraConfig = ''
+      reverse_proxy http://localhost:${toString routes.authentik.httpPort}
     '';
   };
 }
