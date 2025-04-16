@@ -5,6 +5,7 @@
 }:
 {
   imports = [
+    ./homepage
     ./authentik.nix
     ./chiefonboarding.nix
     ./gitea.nix
