@@ -30,6 +30,7 @@
       ExecStart = "${pkgs.docker}/bin/docker compose up";
       ExecStop = "${pkgs.docker}/bin/docker compose down";
     };
+    restartTriggers = [ config.environment.etc."authentik/docker-compose.yml".source ];
   };
 
   services.caddy = {
