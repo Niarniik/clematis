@@ -12,7 +12,7 @@ let
 
     installPhase = ''
       mkdir -p $out
-      cp index.html favicon.png background.webp style.css $out/
+      cp index.html favicon.png background.webp styles.css $out/
     '';
   };
 in

@@ -1,83 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>83-Atelier</title>
-    <link rel="icon" href="favicon.png" />
-    <style>
-      body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 0;
-        background-color: #f4f4f4;
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-      .header {
-        background-color: #333;
-        padding: 10px 20px;
-        color: white;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        z-index: 1000;
-      }
+  <title>83-Atelier</title>
+  <link rel="icon" href="favicon.png" />
 
-      .logo {
-        font-size: 24px;
-        font-weight: bold;
-      }
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<div class="header">
+  <div class="logo">83-Atelier</div>
+  <a href="https://auth.clemat.is" class="auth-button">Login</a>
+</div>
 
-      .auth-button {
-        background-color: #602ee8;
-        color: white;
-        padding: 10px 20px;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 16px;
-        transition: background-color 0.3s;
-        text-decoration: none;
-      }
-
-      .auth-button:hover {
-        background-color: #4b25b8;
-      }
-
-      h1 {
-        color: #333;
-      }
-
-      p {
-        line-height: 1.6;
-        color: #191422;
-      }
-
-      html,
-      body {
-        margin: 0;
-        padding: 0;
-        height: 100%;
-      }
-
-      .fullscreen-image {
-        height: 100%;
-        width: 100%;
-        object-fit: cover;
-        display: block;
-      }
-     </style>
-    </head>
-    <body>
-    <div class="header">
-      <div class="logo">83-Atelier</div>
-      <a href="https://auth.clemat.is" class="auth-button">Login</a>
-    </div>
-
-    <img src="background.webp" alt="Full Screen Image" class="fullscreen-image"/>
-  </body>
+<img src="background.webp" alt="Full Screen Image" class="fullscreen-image" />
+</body>
 </html>
