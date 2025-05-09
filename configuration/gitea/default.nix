@@ -43,7 +43,7 @@ in
             builtins.attrNames (builtins.readDir catppuccinTheme)
           ))
         );
-        DEFAULT_THEME = "catppuccin-lavender-auto";
+        DEFAULT_THEME = "catppuccin-mauve-auto";
       };
     };
   };
