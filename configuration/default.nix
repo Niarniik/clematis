@@ -6,9 +6,9 @@
 {
   imports = [
     ./homepage
+    ./gitea
     ./authentik.nix
     ./chiefonboarding.nix
-    ./gitea.nix
     ./metrics.nix
     ./outline.nix
     ./plane.nix
