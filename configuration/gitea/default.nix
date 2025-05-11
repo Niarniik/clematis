@@ -1,15 +1,13 @@
 {
   lib,
-  pkgs,
   config,
   routes,
   ...
 }:
 let
-  catppuccinTheme = pkgs.fetchzip {
+  catppuccinTheme = builtins.fetchTarball {
     url = "https://github.com/catppuccin/gitea/releases/download/v1.0.2/catppuccin-gitea.tar.gz";
     sha256 = "sha256-rZHLORwLUfIFcB6K9yhrzr+UwdPNQVSadsw6rg8Q7gs=";
-    stripRoot = false;
   };
 in
 {
@@ -36,6 +34,7 @@ in
         REQUIRE_SIGNIN_VIEW = true;
       };
       oauth2_client.ENABLE_AUTO_REGISTRATION = true;
+      session.COOKIE_SECURE = true;
       ui = {
         THEMES = builtins.concatStringsSep "," (
           [ "auto" ]
@@ -61,6 +60,7 @@ in
       chown -R gitea:gitea /var/lib/gitea/custom
     '';
     serviceConfig.Type = "oneshot";
+    restartTriggers = [ catppuccinTheme ];
   };
 
   services.caddy = {
