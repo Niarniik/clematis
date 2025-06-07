@@ -6,8 +6,8 @@
 }:
 {
   environment.etc."authentik/docker-compose.yml".source = builtins.fetchurl {
-    url = "https://goauthentik.io/docker-compose.yml";
-    sha256 = "sha256:1nrqxxyv62sqvfjzqlgi02qrg600gk6kv4hxpkhx0mfyn878g39h";
+    url = "https://goauthentik.io/version/2025.6/docker-compose.yml";
+    sha256 = "sha256:1js32hcrd5xz639pk8q9w627ga7a3mncqcgsgvb42sfsbgkq2l3l";
   };
 
   sops.secrets = {
