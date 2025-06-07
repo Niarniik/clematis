@@ -24,10 +24,11 @@
         echo "AUTHENTIK_SECRET_KEY=$(cat ${config.sops.secrets.authentikSecretKey.path})" >> .env
         echo "COMPOSE_PORT_HTTP=${toString routes.authentik.httpPort}" >> .env
         echo "COMPOSE_PORT_HTTPS=${toString routes.authentik.httpsPort}" >> .env
-
-        ${pkgs.docker}/bin/docker compose pull
       ''}";
-      ExecStart = "${pkgs.docker}/bin/docker compose up";
+      ExecStart = "${pkgs.bash}/bin/bash ${pkgs.writeText "start" ''
+        ${pkgs.docker}/bin/docker compose pull
+        ${pkgs.docker}/bin/docker compose up
+      ''}";
       ExecStop = "${pkgs.docker}/bin/docker compose down";
     };
     restartTriggers = [ config.environment.etc."authentik/docker-compose.yml".source ];
