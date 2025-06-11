@@ -34,6 +34,7 @@
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFB/byXCHGU67JO/LD3Tn5L6tnK8A/CYjSN01YfzbjFj bika"
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICPk9/NeWgM6Z7mJTLkmzBwD8bDPbddrdZ06Oril3597 bikerpenguin67"
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIO0+gintZTGLX369bskr9pwollUaLCCAaw1Dp40PcSPr rog"
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOP3K8HgdUjTm6GDkZoP1EaikQe+J4dnwcJzqmRrgLmo niar"
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJLariFMgn/j0iu+h9PsziV1KFeXWh+hGUl5X5Pb5bel github"
   ];
   services.fail2ban.enable = true;
