@@ -9,6 +9,7 @@
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    flake-utils.url = "github:numtide/flake-utils";
   };
 
   outputs =
@@ -28,5 +29,23 @@
           ./configuration
         ];
       };
-    };
+    }
+    // inputs.flake-utils.lib.eachDefaultSystem (
+      system:
+      let
+        pkgs = import inputs.nixpkgs { inherit system; };
+      in
+      {
+        devShells.default = pkgs.mkShell {
+          sopsPGPKeyDirs = [ "${toString ./.}/keys/users" ];
+
+          nativeBuildInputs = [ (pkgs.callPackage inputs.sops-nix { }).sops-import-keys-hook ];
+
+          buildInputs = [
+            pkgs.sops
+            pkgs.nixos-rebuild
+          ];
+        };
+      }
+    );
 }

@@ -70,6 +70,7 @@
         domain = "${routes.metrics.subDomain}.${routes.domain}";
         root_url = "https://${routes.metrics.subDomain}.${routes.domain}";
       };
+      auth.disable_login_form = true;
     };
     provision.datasources.settings = {
       datasources = [

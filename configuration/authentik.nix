@@ -6,8 +6,8 @@
 }:
 {
   environment.etc."authentik/docker-compose.yml".source = builtins.fetchurl {
-    url = "https://goauthentik.io/docker-compose.yml";
-    sha256 = "185riiq1rax9a5f57hjxgxfk8fi9zxll6j70x45dkssg22bk5pyj";
+    url = "https://goauthentik.io/version/2025.6/docker-compose.yml";
+    sha256 = "sha256:1js32hcrd5xz639pk8q9w627ga7a3mncqcgsgvb42sfsbgkq2l3l";
   };
 
   sops.secrets = {
@@ -24,12 +24,14 @@
         echo "AUTHENTIK_SECRET_KEY=$(cat ${config.sops.secrets.authentikSecretKey.path})" >> .env
         echo "COMPOSE_PORT_HTTP=${toString routes.authentik.httpPort}" >> .env
         echo "COMPOSE_PORT_HTTPS=${toString routes.authentik.httpsPort}" >> .env
-
-        ${pkgs.docker}/bin/docker compose pull
       ''}";
-      ExecStart = "${pkgs.docker}/bin/docker compose up";
+      ExecStart = "${pkgs.bash}/bin/bash ${pkgs.writeText "start" ''
+        ${pkgs.docker}/bin/docker compose pull
+        ${pkgs.docker}/bin/docker compose up
+      ''}";
       ExecStop = "${pkgs.docker}/bin/docker compose down";
     };
+    restartTriggers = [ config.environment.etc."authentik/docker-compose.yml".source ];
   };
 
   services.caddy = {

@@ -57,10 +57,11 @@
       ExecStartPre = "${pkgs.bash}/bin/bash ${pkgs.writeText "startPre" ''
         echo "SECRET_KEY=$(cat ${config.sops.secrets.chiefonboardingSecretKey.path})" > .env
         echo "OIDC_CLIENT_SECRET=$(cat ${config.sops.secrets.chiefonboardingClientSecret.path})" >> .env
-
-        ${pkgs.docker}/bin/docker compose pull
       ''}";
-      ExecStart = "${pkgs.docker}/bin/docker compose up";
+      ExecStart = "${pkgs.bash}/bin/bash ${pkgs.writeText "start" ''
+        ${pkgs.docker}/bin/docker compose pull
+        ${pkgs.docker}/bin/docker compose up
+      ''}";
       ExecStop = "${pkgs.docker}/bin/docker compose down";
     };
     restartTriggers = [ config.environment.etc."chiefonboarding/docker-compose.yml".text ];

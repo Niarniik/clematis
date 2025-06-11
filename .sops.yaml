@@ -2,6 +2,8 @@ keys:
   - &admin_julius EBE7 5BC0 5820 6BC9 F440  895F F7D6 E464 4ACD 05A4
   - &admin_bikerpenguin67 age1qdjtq9nazunecnjykdqn5uwnch4qj9j2j94sxf7c36xpkwytkssqg3py5k
   - &admin_bika age185zya34sklngknhhzejs0lnxegljuw9rmhnekndf76g5lqwdrfdqt2vyj7
+  - &admin_rog age1vmn5fvt6el46wpdp50gge0r2sxu3mamczgt2n6mdnflk8hdywaeqspawmg
+  - &admin_niar age1lanfecpnzfm8fjexrmwsh33xdwacdm8gtxgdnazpncxdcj6xyq5s3mzly0
   - &server_clematis age1pqkkuwmn4wdyk6ncptpxttjnqpuu4gk9sgwwqds2wetvjmv8s48qwfwf5x
 creation_rules:
   - path_regex: ^sops/secrets.yaml$
@@ -11,4 +13,6 @@ creation_rules:
         age:
           - *admin_bikerpenguin67
           - *admin_bika
+          - *admin_rog
+          - *admin_niar
           - *server_clematis
